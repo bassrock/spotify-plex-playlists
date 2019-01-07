@@ -8,10 +8,9 @@ ENV SPOTIFY_URIS ""
 
 WORKDIR /app/
 
-RUN source env/bin/activate && \
-    pip install requests && \
-    pip install requests
-
 COPY spotify-sync.py /app/spotify-sync.py
+COPY requirements.txt /app/requirements.txt
+
+RUN pip install -r requirements.txt
 
 CMD spotify-sync.py
