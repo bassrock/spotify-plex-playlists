@@ -1,9 +1,11 @@
-#Spotify -> Plex
+Spotify -> Plex
+-
 [![](https://img.shields.io/docker/automated/bassrock/spotify-plex-playlists.svg)](https://cloud.docker.com/repository/docker/bassrock/spotify-plex-playlists) [![](https://img.shields.io/docker/pulls/bassrock/spotify-plex-playlists.svg)](https://img.shields.io/docker/pulls/bassrock/spotify-plex-playlists.svg) [![](https://img.shields.io/docker/stars/bassrock/spotify-plex-playlists.svg)](https://cloud.docker.com/repository/docker/bassrock/spotify-plex-playlists)
 
 Converts Spotify URI's to Plex Playlists on a Specified Interval.
 
-##Setup
+Setup
+----
 Set the following Docker environment variables
 
 `SPOTIPY_CLIENT_ID` - A Spotify client id created here: https://developer.spotify.com/dashboard/login
