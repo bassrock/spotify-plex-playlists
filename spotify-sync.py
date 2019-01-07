@@ -116,6 +116,7 @@ def runSync(plex : PlexServer, sp : spotipy.Spotify, spotifyURIs: []):
 
     for playlist in playlists:
         createPlaylist(plex, sp, playlist)
+    logging.info('Finished a Sync Operation')
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
