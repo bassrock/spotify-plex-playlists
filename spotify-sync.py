@@ -60,21 +60,28 @@ def getPlexTracks(plex: PlexServer, spotifyTracks: []) -> List[Track]:
     plexTracks = []
     for spotifyTrack in spotifyTracks:
         track = spotifyTrack['track']
-        logging.info("Searching Plex for: %s by %s" % (track['name'], track['artists'][0]['name']))
+        track_name = track['name']
+        
+        # Parse remixes properly
+        mix_search = re.search('(.*) - (.*Remix|Original Mix)', track_name, re.IGNORECASE)
+        if mix_search:
+            track_name = mix_search.group(1) + ' (' + mix_search.group(2) + ')'
+
+        logging.info("Searching Plex for: %s by %s" % (track_name, track['artists'][0]['name']))
 
         try:
-            musicTracks = plex.search(track['name'], mediatype='track')
+            musicTracks = plex.search(track_name, mediatype='track')
         except:
             try:
-                musicTracks = plex.search(track['name'], mediatype='track')
+                musicTracks = plex.search(track_name, mediatype='track')
             except:
                 logging.info("Issue making plex request")
                 continue
 
         if len(musicTracks) > 0:
-            plexMusic = filterPlexArray(musicTracks, track['name'], track['artists'][0]['name'])
+            plexMusic = filterPlexArray(musicTracks, track_name, track['artists'][0]['name'])
             if len(plexMusic) > 0:
-                logging.info("Found Plex Song: %s by %s" % (track['name'], track['artists'][0]['name']))
+                logging.info("Found Plex Song: %s by %s" % (track_name, track['artists'][0]['name']))
                 plexTracks.append(plexMusic[0])
     return plexTracks
 
