@@ -93,7 +93,7 @@ def getPlexTracks(plex: PlexServer, spotifyTracks: []) -> List[Track]:
 
 
 def createPlaylist(plex: PlexServer, sp: spotipy.Spotify, playlist: []):
-    playlistName = playlist['owner']['display_name'] + " - " + playlist['name']
+    playlistName = playlist['owner']['id'] + " - " + playlist['name']
     logging.info('Starting playlist %s' % playlistName)
     plexTracks = getPlexTracks(plex, getSpotifyTracks(sp, playlist))
     if len(plexTracks) > 0:
