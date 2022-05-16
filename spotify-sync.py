@@ -63,7 +63,7 @@ def getPlexTracks(plex: PlexServer, spotifyTracks: []) -> List[Track]:
         track_options = [track['name']]
         
         # Parse remixes properly
-        mix_search = re.search('(.*) - (.*Remix|Original Mix)', track_options[0], re.IGNORECASE)
+        mix_search = re.search('(.*) - (.*Remix|.*Mix)', track_options[0], re.IGNORECASE)
         if mix_search:
             track_options[0] = mix_search.group(1) + ' (' + mix_search.group(2) + ')'
             # Also match the track without "Original Mix" as this is rarely specified except in Spotify
