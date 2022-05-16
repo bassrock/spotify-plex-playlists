@@ -60,30 +60,34 @@ def getPlexTracks(plex: PlexServer, spotifyTracks: []) -> List[Track]:
     plexTracks = []
     for spotifyTrack in spotifyTracks:
         track = spotifyTrack['track']
-        track_name = track['name']
+        track_options[0] = track['name']
         
         # Parse remixes properly
-        mix_search = re.search('(.*) - (.*Remix|Original Mix)', track_name, re.IGNORECASE)
+        mix_search = re.search('(.*) - (.*Remix|Original Mix)', track_options[0], re.IGNORECASE)
         if mix_search:
-            track_name = mix_search.group(1) + ' (' + mix_search.group(2) + ')'
+            track_options[0] = mix_search.group(1) + ' (' + mix_search.group(2) + ')'
+            # Also match the track without "Original Mix" as this is rarely specified except in Spotify
+            if mix_search.group(2) == "Original Mix":
+                track_options[1] = mix_search.group(1)
 
-        logging.info("Searching Plex for: %s by %s" % (track_name, track['artists'][0]['name']))
+        logging.info("Searching Plex for: %s by %s" % (track_options[0], track['artists'][0]['name']))
 
-        for artist in track['artists']:
-            try:
-                musicTracks = plex.search(track_name, mediatype='track')
-            except:
+        for track_name in track_options:
+            for artist in track['artists']:
                 try:
                     musicTracks = plex.search(track_name, mediatype='track')
                 except:
-                    logging.info("Issue making plex request")
-                    break
-            if len(musicTracks) > 0:
-                plexMusic = filterPlexArray(musicTracks, track_name, artist['name'])
-                if len(plexMusic) > 0:
-                    logging.info("Found Plex Song: %s by %s" % (track_name, artist['name']))
-                    plexTracks.append(plexMusic[0])
-                    break
+                    try:
+                        musicTracks = plex.search(track_name, mediatype='track')
+                    except:
+                        logging.info("Issue making plex request")
+                        break
+                if len(musicTracks) > 0:
+                    plexMusic = filterPlexArray(musicTracks, track_name, artist['name'])
+                    if len(plexMusic) > 0:
+                        logging.info("Found Plex Song: %s by %s" % (track_name, artist['name']))
+                        plexTracks.append(plexMusic[0])
+                        break
                     
     return plexTracks
 
